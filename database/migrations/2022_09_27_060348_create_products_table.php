@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('description');
             $table->integer('price');
-            $table->string('active');
+            $table->boolean('active');
             $table->integer('quantity');
             $table->timestamps();
         });
