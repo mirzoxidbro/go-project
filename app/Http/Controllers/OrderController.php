@@ -35,6 +35,7 @@ class OrderController extends Controller
         ]);
     }
 
+
     public function update(OrderRequest $request, $id){
         $order = $this->service->update($request->validated(), $id);
         return response()->json([
