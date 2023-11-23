@@ -10,7 +10,7 @@ import (
 
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 
-	"github.com/mirzoxidbro/go-project/models"
+	"github.com/mirzoxidbro/go-project/api/models"
 )
 
 type Server struct {

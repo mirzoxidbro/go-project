@@ -8,7 +8,7 @@ import (
 	"github.com/mirzoxidbro/go-project/api/auth"
 	"github.com/mirzoxidbro/go-project/api/responses"
 	"github.com/mirzoxidbro/go-project/api/utils/formaterror"
-	"github.com/mirzoxidbro/go-project/models"
+	"github.com/mirzoxidbro/go-project/api/models"
 	"golang.org/x/crypto/bcrypt"
 )
 
