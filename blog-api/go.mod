@@ -3,6 +3,7 @@ module github.com/mirzoxidbro/go-project
 go 1.21.4
 
 require (
+	github.com/Code-Hex/dd v1.1.0 // indirect
 	github.com/badoux/checkmail v1.2.1 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/gorilla/mux v1.8.1 // indirect
