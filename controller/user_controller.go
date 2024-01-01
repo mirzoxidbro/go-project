@@ -39,7 +39,10 @@ func (controller *UserController) Create(ctx *gin.Context) {
 		return
 	}
 
-	user := controller.UserService.Create(createUserRequest)
+	user, err := controller.UserService.Create(createUserRequest)
+	if err != nil {
+		helper.Error(ctx, err)
+	}
 	data := helper.RespondWithJSON(user)
 
 	ctx.JSON(http.StatusOK, data)
@@ -87,8 +90,8 @@ func (controller *UserController) Delete(ctx *gin.Context) {
 }
 
 func (controller *UserController) FindById(ctx *gin.Context) {
-	tagId := ctx.Param("tagId")
-	id, err := strconv.Atoi(tagId)
+	userId := ctx.Param("userId")
+	id, err := strconv.Atoi(userId)
 	helper.ErrorPanic(err)
 
 	userResponse := controller.UserService.FindById(id)

@@ -2,6 +2,7 @@ package router
 
 import (
 	"go-project/controller"
+	middleware "go-project/middlewares"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -16,12 +17,17 @@ func NewRouter() *gin.Engine {
 	baseRouter := router.Group("/api")
 	{
 		usersRouter := baseRouter.Group("/users")
+		usersRouter.GET("/:userId", middleware.RoleMiddleware("admin"), controller.UserControllerExecution().FindById)
 		usersRouter.GET("", controller.UserControllerExecution().FindAll)
-		usersRouter.GET("/:userId", controller.UserControllerExecution().FindById)
 		usersRouter.POST("", controller.UserControllerExecution().Create)
-		usersRouter.PUT("/:userId", controller.UserControllerExecution().Update)
-		usersRouter.DELETE("/:userId", controller.UserControllerExecution().Delete)
+		usersRouter.PUT("/:userId", middleware.RoleMiddleware("admin"), controller.UserControllerExecution().Update)
+		usersRouter.DELETE("/:userId", middleware.RoleMiddleware("admin"), controller.UserControllerExecution().Delete)
 	}
 
+	{
+		authRouter := baseRouter.Group("/auth")
+		authRouter.POST("/login", controller.Login)
+		authRouter.Use(middleware.AuthMiddleware()).POST("/me", controller.CurrentUser)
+	}
 	return router
 }

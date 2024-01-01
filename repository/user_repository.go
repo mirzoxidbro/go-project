@@ -19,10 +19,13 @@ func UserREpositoryImplExecution() interfaces.UserRepository {
 	return &UserRepositoryImpl{Db: db}
 }
 
-func (t *UserRepositoryImpl) Delete(userId int) {
-	var user model.User
-	result := t.Db.Where("id = ?", userId).Delete(&user)
-	helper.ErrorPanic(result.Error)
+func (t *UserRepositoryImpl) Save(users model.User) (user model.User, err error) {
+	result := t.Db.Create(&users)
+	if result.Error != nil {
+		helper.ErrorPanic(result.Error)
+		return user, result.Error
+	}
+	return users, nil
 }
 
 func (t *UserRepositoryImpl) FindAll() []model.User {
@@ -42,12 +45,6 @@ func (t *UserRepositoryImpl) FindById(userId int) (users model.User, err error) 
 	}
 }
 
-func (t *UserRepositoryImpl) Save(users model.User) (user model.User) {
-	result := t.Db.Create(&users)
-	helper.ErrorPanic(result.Error)
-	return users
-}
-
 func (t *UserRepositoryImpl) Update(user model.User) model.User {
 	updateUser := map[string]interface{}{
 		"Name":     user.Name,
@@ -60,4 +57,10 @@ func (t *UserRepositoryImpl) Update(user model.User) model.User {
 	var updatedUser model.User
 	t.Db.First(&updatedUser, user.ID)
 	return updatedUser
+}
+
+func (t *UserRepositoryImpl) Delete(userId int) {
+	var user model.User
+	result := t.Db.Where("id = ?", userId).Delete(&user)
+	helper.ErrorPanic(result.Error)
 }

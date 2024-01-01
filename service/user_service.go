@@ -7,10 +7,11 @@ import (
 	"go-project/infrastructure/interfaces"
 	"go-project/model"
 	"go-project/repository"
+	"go-project/utils"
 )
 
 type UserService interface {
-	Create(user usersRequest.CreateUserRequest) model.User
+	Create(user usersRequest.CreateUserRequest) (userModel model.User, err error)
 	Update(user usersRequest.UpdateUserRequest) model.User
 	Delete(userId int)
 	FindById(userId int) usersResponse.BaseResponse
@@ -28,15 +29,19 @@ func UserServiceImplExecution() UserService {
 	}
 }
 
-func (t *UserServiceImpl) Create(user usersRequest.CreateUserRequest) (users model.User) {
+func (t *UserServiceImpl) Create(user usersRequest.CreateUserRequest) (users model.User, err error) {
+	password, err := utils.HashPassword(user.Password)
+	if err != nil {
+		return users, err
+	}
 	userModel := model.User{
 		Name:     user.Name,
 		Email:    user.Email,
 		Role:     user.Role,
-		Password: user.Password,
+		Password: password,
 	}
 	t.UserRepository.Save(userModel)
-	return userModel
+	return userModel, nil
 }
 
 func (t *UserServiceImpl) Delete(userId int) {
