@@ -14,7 +14,7 @@ type UserRepositoryImpl struct {
 	Db *gorm.DB
 }
 
-func UserREpositoryImplExecution() interfaces.UserRepository {
+func UserRepositoryImplExecution() interfaces.UserRepository {
 	db := initializers.DB
 	return &UserRepositoryImpl{Db: db}
 }

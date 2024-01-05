@@ -14,8 +14,8 @@ type UserService interface {
 	Create(user usersRequest.CreateUserRequest) (userModel model.User, err error)
 	Update(user usersRequest.UpdateUserRequest) model.User
 	Delete(userId int)
-	FindById(userId int) usersResponse.BaseResponse
-	FindAll() []usersResponse.BaseResponse
+	FindById(userId int) usersResponse.UserResponse
+	FindAll() []usersResponse.UserResponse
 }
 
 type UserServiceImpl struct {
@@ -23,7 +23,7 @@ type UserServiceImpl struct {
 }
 
 func UserServiceImplExecution() UserService {
-	userRepository := repository.UserREpositoryImplExecution()
+	userRepository := repository.UserRepositoryImplExecution()
 	return &UserServiceImpl{
 		UserRepository: userRepository,
 	}
@@ -48,12 +48,12 @@ func (t *UserServiceImpl) Delete(userId int) {
 	t.UserRepository.Delete(userId)
 }
 
-func (t *UserServiceImpl) FindAll() []usersResponse.BaseResponse {
+func (t *UserServiceImpl) FindAll() []usersResponse.UserResponse {
 	result := t.UserRepository.FindAll()
 
-	var users []usersResponse.BaseResponse
+	var users []usersResponse.UserResponse
 	for _, value := range result {
-		user := usersResponse.BaseResponse{
+		user := usersResponse.UserResponse{
 			Id:    value.ID,
 			Name:  value.Name,
 			Email: value.Email,
@@ -65,15 +65,16 @@ func (t *UserServiceImpl) FindAll() []usersResponse.BaseResponse {
 	return users
 }
 
-func (t *UserServiceImpl) FindById(userId int) usersResponse.BaseResponse {
+func (t *UserServiceImpl) FindById(userId int) usersResponse.UserResponse {
 	userData, err := t.UserRepository.FindById(userId)
 	helper.ErrorPanic(err)
 
-	userResponse := usersResponse.BaseResponse{
-		Id:    userData.ID,
-		Name:  userData.Name,
-		Email: userData.Email,
-		Role:  userData.Role,
+	userResponse := usersResponse.UserResponse{
+		Id:      userData.ID,
+		Name:    userData.Name,
+		Email:   userData.Email,
+		Role:    userData.Role,
+		// Company: userData,
 	}
 	return userResponse
 }

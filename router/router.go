@@ -29,5 +29,14 @@ func NewRouter() *gin.Engine {
 		authRouter.POST("/login", controller.Login)
 		authRouter.Use(middleware.AuthMiddleware()).POST("/me", controller.CurrentUser)
 	}
+
+	{
+		companyRouter := baseRouter.Group("/company")
+		companyRouter.GET("/", middleware.RoleMiddleware("admin"), controller.CompanyControllerExecution().FindAll)
+		companyRouter.GET("/:companyId", middleware.RoleMiddleware("admin,company"), controller.CompanyControllerExecution().FindById)
+		companyRouter.POST("/", middleware.RoleMiddleware("admin,company"), controller.CompanyControllerExecution().Create)
+		companyRouter.PUT("/:companyId", middleware.RoleMiddleware("admin,company"), controller.CompanyControllerExecution().Update)
+		companyRouter.DELETE("/:companyId", middleware.RoleMiddleware("admin,company"), controller.CompanyControllerExecution().Delete)
+	}
 	return router
 }
