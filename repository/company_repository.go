@@ -2,7 +2,6 @@ package repository
 
 import (
 	"errors"
-	"fmt"
 	"go-project/helper"
 	"go-project/infrastructure/interfaces"
 	"go-project/initializers"
@@ -64,8 +63,6 @@ func (c *CompanyRepositoryImpl) Update(company model.Company) model.Company {
 	if company.Address != "" {
 		updateCompany["Address"] = company.Address
 	}
-
-	fmt.Print(updateCompany)
 
 	c.Db.Model(&company).Updates(updateCompany)
 

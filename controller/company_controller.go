@@ -113,5 +113,4 @@ func (controller *CompanyController) FindAll(ctx *gin.Context) {
 	}
 	ctx.Header("Content-Type", "application/json")
 	ctx.JSON(http.StatusOK, webResponse)
-
 }

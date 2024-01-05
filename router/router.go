@@ -38,5 +38,16 @@ func NewRouter() *gin.Engine {
 		companyRouter.PUT("/:companyId", middleware.RoleMiddleware("admin,company"), controller.CompanyControllerExecution().Update)
 		companyRouter.DELETE("/:companyId", middleware.RoleMiddleware("admin,company"), controller.CompanyControllerExecution().Delete)
 	}
+
+	{
+		employeeRouter := baseRouter.Group("/employee")
+		employeeRouter.GET("/", middleware.RoleMiddleware("admin,company"), controller.EmployeeControllerExecution().FindAll)
+		employeeRouter.GET("/:employeeId", middleware.RoleMiddleware("admin,company"), controller.EmployeeControllerExecution().FindById)
+		employeeRouter.POST("/", middleware.RoleMiddleware("company"), controller.EmployeeControllerExecution().Create)
+		employeeRouter.PUT("/:employeeId", middleware.RoleMiddleware("company"))
+		employeeRouter.DELETE("/:employeeId", middleware.RoleMiddleware("company,admin"), controller.EmployeeControllerExecution().Delete)
+
+	}
+
 	return router
 }
