@@ -2,7 +2,6 @@ package controller
 
 import (
 	EmployeeRequest "go-project/data/requests/employee"
-	response "go-project/data/responses"
 	"go-project/helper"
 	"go-project/service"
 	"net/http"
@@ -28,13 +27,9 @@ func EmployeeControllerExecution() *EmployeeController {
 
 func (controller *EmployeeController) FindAll(ctx *gin.Context) {
 	employeeResponse := controller.EmployeeService.FindAll()
-	webResponse := response.Response{
-		Code:   http.StatusOK,
-		Status: "Ok",
-		Data:   employeeResponse,
-	}
+
 	ctx.Header("Content-Type", "application/json")
-	ctx.JSON(http.StatusOK, webResponse)
+	ctx.JSON(http.StatusOK, helper.RespondWithJSON(employeeResponse))
 }
 
 func (controller *EmployeeController) Create(ctx *gin.Context) {
@@ -65,14 +60,9 @@ func (controller *EmployeeController) FindById(ctx *gin.Context) {
 	helper.ErrorPanic(err)
 
 	employeeResponse := controller.EmployeeService.FindById(id)
+	response := helper.RespondWithJSON(employeeResponse)
 
-	webResponse := response.Response{
-		Code:   http.StatusOK,
-		Status: "Ok",
-		Data:   employeeResponse,
-	}
-	ctx.Header("Content-Type", "application/json")
-	ctx.JSON(http.StatusOK, webResponse)
+	ctx.JSON(http.StatusOK, response)
 }
 
 func (controller *EmployeeController) Update(ctx *gin.Context) {
@@ -91,13 +81,10 @@ func (controller *EmployeeController) Update(ctx *gin.Context) {
 
 	user := controller.EmployeeService.Update(id, UpdateEmployeeRequest)
 
-	webResponse := response.Response{
-		Code:   http.StatusOK,
-		Status: "Ok",
-		Data:   user,
-	}
+	response := helper.RespondWithJSON(user)
+
 	ctx.Header("Content-Type", "application/json")
-	ctx.JSON(http.StatusOK, webResponse)
+	ctx.JSON(http.StatusOK, response)
 }
 
 func (controller *EmployeeController) Delete(ctx *gin.Context) {
@@ -106,11 +93,8 @@ func (controller *EmployeeController) Delete(ctx *gin.Context) {
 	helper.ErrorPanic(err)
 	controller.EmployeeService.Delete(id)
 
-	webResponse := response.Response{
-		Code:   http.StatusOK,
-		Status: "Ok",
-		Data:   nil,
-	}
+	response := helper.RespondWithJSON(nil)
+
 	ctx.Header("Content-Type", "application/json")
-	ctx.JSON(http.StatusOK, webResponse)
+	ctx.JSON(http.StatusOK, response)
 }

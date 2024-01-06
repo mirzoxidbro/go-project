@@ -2,7 +2,6 @@ package controller
 
 import (
 	usersRequest "go-project/data/requests/users"
-	response "go-project/data/responses"
 	"go-project/helper"
 	"go-project/service"
 	"net/http"
@@ -65,13 +64,8 @@ func (controller *UserController) Update(ctx *gin.Context) {
 
 	user := controller.UserService.Update(UpdateUserRequest)
 
-	webResponse := response.Response{
-		Code:   http.StatusOK,
-		Status: "Ok",
-		Data:   user,
-	}
 	ctx.Header("Content-Type", "application/json")
-	ctx.JSON(http.StatusOK, webResponse)
+	ctx.JSON(http.StatusOK, helper.RespondWithJSON(user))
 }
 
 func (controller *UserController) Delete(ctx *gin.Context) {
@@ -80,13 +74,8 @@ func (controller *UserController) Delete(ctx *gin.Context) {
 	helper.ErrorPanic(err)
 	controller.UserService.Delete(id)
 
-	webResponse := response.Response{
-		Code:   http.StatusOK,
-		Status: "Ok",
-		Data:   nil,
-	}
 	ctx.Header("Content-Type", "application/json")
-	ctx.JSON(http.StatusOK, webResponse)
+	ctx.JSON(http.StatusOK, helper.RespondWithJSON(nil))
 }
 
 func (controller *UserController) FindById(ctx *gin.Context) {
@@ -96,23 +85,14 @@ func (controller *UserController) FindById(ctx *gin.Context) {
 
 	userResponse := controller.UserService.FindById(id)
 
-	webResponse := response.Response{
-		Code:   http.StatusOK,
-		Status: "Ok",
-		Data:   userResponse,
-	}
 	ctx.Header("Content-Type", "application/json")
-	ctx.JSON(http.StatusOK, webResponse)
+	ctx.JSON(http.StatusOK, helper.RespondWithJSON(userResponse))
 }
 
 func (controller *UserController) FindAll(ctx *gin.Context) {
 	userResponse := controller.UserService.FindAll()
-	webResponse := response.Response{
-		Code:   http.StatusOK,
-		Status: "Ok",
-		Data:   userResponse,
-	}
+
 	ctx.Header("Content-Type", "application/json")
-	ctx.JSON(http.StatusOK, webResponse)
+	ctx.JSON(http.StatusOK, helper.RespondWithJSON(userResponse))
 
 }

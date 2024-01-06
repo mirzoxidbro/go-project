@@ -2,7 +2,6 @@ package controller
 
 import (
 	companyRequest "go-project/data/requests/company"
-	response "go-project/data/responses"
 	"go-project/helper"
 	"go-project/service"
 	"net/http"
@@ -64,13 +63,10 @@ func (controller *CompanyController) Update(ctx *gin.Context) {
 
 	user := controller.CompanyService.Update(id, UpdateCompanyRequest)
 
-	webResponse := response.Response{
-		Code:   http.StatusOK,
-		Status: "Ok",
-		Data:   user,
-	}
+	response := helper.RespondWithJSON(user)
+
 	ctx.Header("Content-Type", "application/json")
-	ctx.JSON(http.StatusOK, webResponse)
+	ctx.JSON(http.StatusOK, response)
 }
 
 func (controller *CompanyController) Delete(ctx *gin.Context) {
@@ -79,13 +75,10 @@ func (controller *CompanyController) Delete(ctx *gin.Context) {
 	helper.ErrorPanic(err)
 	controller.CompanyService.Delete(id)
 
-	webResponse := response.Response{
-		Code:   http.StatusOK,
-		Status: "Ok",
-		Data:   nil,
-	}
+	response := helper.RespondWithJSON(nil)
+
 	ctx.Header("Content-Type", "application/json")
-	ctx.JSON(http.StatusOK, webResponse)
+	ctx.JSON(http.StatusOK, response)
 }
 
 func (controller *CompanyController) FindById(ctx *gin.Context) {
@@ -95,22 +88,13 @@ func (controller *CompanyController) FindById(ctx *gin.Context) {
 
 	userResponse := controller.CompanyService.FindById(id)
 
-	webResponse := response.Response{
-		Code:   http.StatusOK,
-		Status: "Ok",
-		Data:   userResponse,
-	}
 	ctx.Header("Content-Type", "application/json")
-	ctx.JSON(http.StatusOK, webResponse)
+	ctx.JSON(http.StatusOK, helper.RespondWithJSON(userResponse))
 }
 
 func (controller *CompanyController) FindAll(ctx *gin.Context) {
 	userResponse := controller.CompanyService.FindAll()
-	webResponse := response.Response{
-		Code:   http.StatusOK,
-		Status: "Ok",
-		Data:   userResponse,
-	}
+
 	ctx.Header("Content-Type", "application/json")
-	ctx.JSON(http.StatusOK, webResponse)
+	ctx.JSON(http.StatusOK, helper.RespondWithJSON(userResponse))
 }

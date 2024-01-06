@@ -10,9 +10,9 @@ import (
 func Error(ctx *gin.Context, err error) {
 	if err != nil {
 		webResponse := response.Response{
-			Code:   http.StatusBadRequest,
-			Status: "Error",
-			Data:   err.Error(),
+			Code:    http.StatusBadRequest,
+			Message: "Error",
+			Data:    err.Error(),
 		}
 		ctx.JSON(http.StatusBadRequest, webResponse)
 	}
@@ -26,9 +26,9 @@ func ErrorPanic(err error) {
 
 func RespondWithJSON(payload interface{}) response.Response {
 	Response := response.Response{
-		Code:   http.StatusOK,
-		Status: "Ok",
-		Data:   payload,
+		Code:    http.StatusOK,
+		Message: "Ok",
+		Data:    payload,
 	}
 
 	return Response
